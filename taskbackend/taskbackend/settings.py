@@ -73,13 +73,19 @@ WSGI_APPLICATION = 'taskbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'da6eopva69emal',
+        'HOST':'ec2-54-204-96-190.compute-1.amazonaws.com',
+        'PORT':5432,
+        'USER':'ujvcohpojxlbbk',
+        'PASSWORD':'bc7b4c550e3753fdd242793aefbbef6d87ca15a1c0549aabfc5ecd2cde40d996'
+
     }
 }
-
+#postgres://ujvcohpojxlbbk:bc7b4c550e3753fdd242793aefbbef6d87ca15a1c0549aabfc5ecd2cde40d996@ec2-54-204-96-190.compute-1.amazonaws.com:5432/da6eopva69emal
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
