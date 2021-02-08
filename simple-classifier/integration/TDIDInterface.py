@@ -31,10 +31,11 @@ class TDIDInterface(CompatibleDataset):
                 curr_label=CompatibleDataset.tiradsToTarget(curr_xml_parsed['case']['tirads'])
                 self.targets.append(curr_label)
                 self.images.append(curr_image)
+
             except FileNotFoundError:
                 self.notfound.append(i)
 
-        print("complete"+str(self.notfound))
+        print("Image load complete, but images "+str(self.notfound)+" not found")
     """
         Return an array of both maligrant and benign cases as 2D normalized np.array
     """

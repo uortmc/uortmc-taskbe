@@ -8,17 +8,21 @@ This is a interface to our infrastructure, of what a 'dataset' means.
 """
 class CompatibleDataset:
     """
-        Return an array of both maligrant and benign cases as 2D normalized np.array
+        Return an array of both malignant and benign cases as 2D normalized np.array
     """
     def data(self):
         pass
     """
         Return an array of the targets. for a given self.data()[i] , the self.target()[i] will return its label
-        0 for benign, 1 for maligrant, for now
+        0 for benign, 1 for malignant, for now
     """
     def target(self):
         pass
 
+    """
+        A simple method that converts the TIRADS dataset into a binary Malignant-Benign dataset. 
+    
+    """
     @staticmethod
     def tiradsToTarget(tirads):
         if (tirads == "2" or tirads == "3"):
