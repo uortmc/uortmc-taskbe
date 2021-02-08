@@ -2,7 +2,9 @@ from matplotlib import image
 from matplotlib import pyplot
 import numpy as np
 
-
+from filters.Chop import Chop
+from filters.Grayscale import Grayscale
+from random import randint
 """
 This is a interface to our infrastructure, of what a 'dataset' means.
 """
@@ -37,8 +39,23 @@ class CompatibleDataset:
     def modelCompatible(self, image):
         return image.flatten()
 
+#=================================================================================== Image filters
+    """
+        Chops the scans and returns the exact data area
+    """
 
-#stats
+    def chop(self, image):
+        return Chop.apply(image, 139, 145, 5, 50)
+
+    """
+        A simple spartial domain filter to convert the image into grayscale
+    """
+
+    def grayScale(self, image):
+        return Grayscale.apply(image)
+
+
+#=================================================================================== Stats
     def confusionMatrix(self,target,estimated):
         positive=negative=positive_negative=negative_positive=0
         assert target.shape==estimated.shape
@@ -53,5 +70,36 @@ class CompatibleDataset:
             if (target[i] == 0 and estimated[i] == 1):
                 positive_negative += 1
         return [positive,negative,positive_negative,negative_positive]
+
+#=================================================================================== Shuffle
+    """
+    Assuming that data will be a array of shape (n,84180)
+    
+    """
+    @staticmethod
+    def shuffleDataset(iterations,data,targets)->tuple:
+        dataShape=data.shape
+        dataPoints=dataShape[0]
+        assert dataPoints==targets.shape[0]  #Just a check to verify that there is equal amount of datapoints and targets
+        swapPositiona=swapPositionb=None
+        dataa=datab=targeta=targetb=None
+        for i in range(iterations):
+            swapPositiona,swapPositionb=randint(0,dataPoints-1),randint(0,dataPoints-1)
+            if swapPositionb==swapPositiona:continue
+            dataa=data[swapPositiona]
+            targeta=targets[swapPositiona]
+            datab = data[swapPositionb]
+            targetb = targets[swapPositionb]
+
+            data[swapPositiona]=datab
+            targets[swapPositiona]=targetb
+
+            data[swapPositionb] = dataa
+            targets[swapPositionb] = targeta
+
+        return data,targets
+
+
+
 
 

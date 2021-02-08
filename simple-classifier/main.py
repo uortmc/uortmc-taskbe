@@ -19,8 +19,10 @@ from matplotlib import pyplot
 image_data = a.data()
 print("image data shape"+str(image_data.shape))
 images = np.array([a.modelCompatible(a.grayScale(a.chop(x))) for x in image_data])
-
 targets = a.target()
+
+images,targets=TDIDInterface.shuffleDataset(600,images,targets)
+
 #pyplot.imshow(a.grayScale(a.chop(image_data[1])))
 #pyplot.imshow(a.chop(image_data[1]))
 #pyplot.show()
@@ -37,11 +39,14 @@ clf.fit(
 #print(clf.predict(images[-1].reshape(1, -1)))
 #print(clf.predict(images))
 #print(targets)
-print(
-    a.confusionMatrix(
-        targets[len(targets)-160:],                             #Pass the Targets
-        clf.predict(images[len(targets)-160:])                  #Pass what the model predicts
-    )
+
+con=a.confusionMatrix(
+    targets[len(targets)-160:],                             #Pass the Targets
+    clf.predict(images[len(targets)-160:])                  #Pass what the model predicts
 )
+print(con)
+print(con[0]/(con[0]+con[1]))
+
+
 
 

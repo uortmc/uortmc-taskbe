@@ -4,8 +4,7 @@ from matplotlib import image
 from matplotlib import pyplot
 import numpy as np
 from integration.CompatibleDataset import CompatibleDataset
-from filters.Chop import Chop
-from filters.Grayscale import Grayscale
+
 """
 This is a interface to our infrastructure, of what a 'dataset' means.
 """
@@ -36,30 +35,15 @@ class TDIDInterface(CompatibleDataset):
                 self.notfound.append(i)
 
         print("Image load complete, but images "+str(self.notfound)+" not found")
-    """
-        Return an array of both maligrant and benign cases as 2D normalized np.array
-    """
+
     def data(self):
         return np.array(self.images)
-    """
-        Return an array of the targets. for a given self.data()[i] , the self.target()[i] will return its label
-        0 for benign, 1 for maligrant, for now
-    """
+
     def target(self):
         return np.array(self.targets)
 
 
-    #image filters
-    """
-        Chops the scans and returns the exact data area
-    """
-    def chop(self,image):
-        return Chop.apply(image,139,145,5,50)
-    """
-        A simple spartial domain filter to convert the image into grayscale
-    """
-    def grayScale(self,image):
-        return Grayscale.apply(image)
+
 
 
 
