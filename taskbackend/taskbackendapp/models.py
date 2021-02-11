@@ -1,6 +1,5 @@
 from django.db.models import *
-from django.contrib.auth.models import User
-from django.utils.timezone import now
+
 import uuid
 
 class Scan(Model):
