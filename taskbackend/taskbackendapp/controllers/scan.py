@@ -17,6 +17,7 @@ from ..exceptions.scan import TokenValidationViolation, ScanNotFound
 from ..logging.levels import LogLevel
 from ..logging.logging import LoggingLayer
 from ..models import Scan
+from ..service.InfoBeService import InfoBeService
 
 
 class ScanController:
@@ -24,6 +25,7 @@ class ScanController:
     loggingLayer=LoggingLayer(logger).log
     dao:ScanDAO=ScanDAO()
     dto:ScanDTO=ScanDTO("ScanController")
+    infoBeService:InfoBeService=InfoBeService()
 
     @staticmethod
     def getScans(req:HttpRequest):
@@ -41,14 +43,12 @@ class ScanController:
                     ScanController.dto.fail(e.reason),LogLevel.ERROR
                 )
             )
-
-
-
     @staticmethod
     def addScan(req: HttpRequest):
         try:
             token=ScanController.__getTokenFromAddRequest(req)
             scan:Scan=ScanController.dao.addScan(token)
+            mocked=ScanController.infoBeService.proccessScan(scan)
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.successAddScan(scan)
