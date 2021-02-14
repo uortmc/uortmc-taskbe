@@ -4,8 +4,7 @@ import uuid
 
 class Scan(Model):
     ALGORITHMS = [
-        ('NS', 'NOT SET'),
-        ('SVC', 'Simple Support Vector Machine')
+        ('SVC', 'Simple C-Support Vector Machine')
     ]
     token = UUIDField('Scan Token',unique=True, editable=False)
     algorithm=CharField('Algorithm Used',max_length=10,choices=ALGORITHMS,default=ALGORITHMS[0][0])

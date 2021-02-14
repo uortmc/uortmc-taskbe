@@ -27,10 +27,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_CREDENTIALS=True
+
+SESSION_COOKIE_SAMESITE=None
+SESSION_COOKIE_SECURE = True
+"""
+SESSION_COOKIE_SAMESITE=None
+SESSION_COOKIE_SECURE = True  
+This works on moz but not on chrome. because the spec says that samesite=none -> coockie needs to be secure
+and secure=https . moz does not have problem with accepting an insecure cookie(non-https) flagged as secure
+"""
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'taskbackendapp.apps.TaskbackendappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
