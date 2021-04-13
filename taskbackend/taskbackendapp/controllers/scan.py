@@ -9,7 +9,8 @@ from django.contrib.auth import authenticate, login
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.models import User
 import logging
-
+import base64
+import imghdr
 from ..dao.scan import ScanDAO
 from ..dto.scan import ScanDTO
 from ..exceptions.base import FieldsMissingException
@@ -70,9 +71,14 @@ class ScanController:
             raise FieldsMissingException
 
     @staticmethod
-    def __validateBase64Image(base64:str)->str:
-        raise ImageBase64DecodeException()
-        #return base64
+    def __validateBase64Image(base64Img:str)->str:
+        """
+            The tests list returns the list of the checks to be made for a specific file format. tests[1] checks if the
+            underlying image is a png image.
+        """
+        if(not imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'):
+            raise ImageBase64DecodeException()
+        return base64Img
 
     @staticmethod
     def __getTokenFromGetRequest(req: HttpRequest) -> str:
