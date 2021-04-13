@@ -13,7 +13,7 @@ import logging
 from ..dao.scan import ScanDAO
 from ..dto.scan import ScanDTO
 from ..exceptions.base import FieldsMissingException
-from ..exceptions.scan import TokenValidationViolation, ScanNotFound
+from ..exceptions.scan import TokenValidationViolation, ScanNotFound, ImageBase64DecodeException
 from ..logging.levels import LogLevel
 from ..logging.logging import LoggingLayer
 from ..models import Scan
@@ -46,15 +46,16 @@ class ScanController:
     @staticmethod
     def addScan(req: HttpRequest):
         try:
-            token=ScanController.__getTokenFromAddRequest(req)
-            scan:Scan=ScanController.dao.addScan(token)
+            (token,image)=ScanController.__getFieldsFromAddRequest(req)
+            image=ScanController.__validateBase64Image(image)
+            scan:Scan=ScanController.dao.addScan(token,image)
             mocked=ScanController.infoBeService.proccessScan(scan)
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.successAddScan(scan)
                 )
             )
-        except (TokenValidationViolation,FieldsMissingException) as e:
+        except (TokenValidationViolation,FieldsMissingException,ImageBase64DecodeException) as e:
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.fail(e.reason),LogLevel.ERROR
@@ -62,11 +63,16 @@ class ScanController:
             )
 
     @staticmethod
-    def __getTokenFromAddRequest(req:HttpRequest)->str:
+    def __getFieldsFromAddRequest(req:HttpRequest)->():
         try:
-            return req.POST['token']
+            return (req.POST['token'],req.POST['image'])
         except MultiValueDictKeyError:
             raise FieldsMissingException
+
+    @staticmethod
+    def __validateBase64Image(base64:str)->str:
+        raise ImageBase64DecodeException()
+        #return base64
 
     @staticmethod
     def __getTokenFromGetRequest(req: HttpRequest) -> str:
