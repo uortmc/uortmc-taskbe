@@ -5,9 +5,9 @@ from ..models import Scan
 
 
 class ScanDAO:
-    def addScan(self,token):
+    def addScan(self,token,image):
         try:
-            s=Scan(token=token)
+            s=Scan(token=token,image=image)
             s.save()
             return s
         except IntegrityError as e:

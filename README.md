@@ -3,8 +3,21 @@
 This microservice will have the responsibility to perform predictions on a given scan, and return its results
 on the frontend.
 
-taskbe is not implemented yet, but the enviroment is set up (heroku procfile,Dockerfile,django app)
+In order to run ...
+1. Duplicate .env.local
+2. Rename to .env
+3. run
+```shell script
+  source .env     
+  heroku local
 
+```
+```
+.env must be renamed and sourced, because heroku local depends on PORT enviromental variable to select the port to bind
+.env is a typical KEY=VALUE format, with 'export's included. thore are ignored by the library, makes possible to source and 
+load the same file. 
+  
+```
 ### Simple Classifier
 Simple Classifier is as the name suggests, a simple classification(A support vector machine) method with all its required integrations
 and supported code. it features a clean and modular architecture that enables the plug-and-play of various

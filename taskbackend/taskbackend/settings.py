@@ -86,20 +86,33 @@ WSGI_APPLICATION = 'taskbackend.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# postgres://jccbosfpvydpfv:4527f4d7f16fd91f4122e745e9d9f4a31d38feaba1132b27acb51831f5e67a22@ec2-54-211-176-156.compute-1.amazonaws.com:5432/d5ce2v7g0lmdrk
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'da6eopva69emal',
-        'HOST':'ec2-54-204-96-190.compute-1.amazonaws.com',
+        'NAME': 'd5ce2v7g0lmdrk',
+        'HOST':'ec2-54-211-176-156.compute-1.amazonaws.com',
         'PORT':5432,
-        'USER':'ujvcohpojxlbbk',
-        'PASSWORD':'bc7b4c550e3753fdd242793aefbbef6d87ca15a1c0549aabfc5ecd2cde40d996'
+        'USER':'jccbosfpvydpfv',
+        'PASSWORD':'4527f4d7f16fd91f4122e745e9d9f4a31d38feaba1132b27acb51831f5e67a22'
 
     }
 }
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres2',
+        'HOST':'localhost',
+        'PORT':5432,
+        'USER':'',
+        'PASSWORD':''
+
+    }
+}
+"""
 #postgres://ujvcohpojxlbbk:bc7b4c550e3753fdd242793aefbbef6d87ca15a1c0549aabfc5ecd2cde40d996@ec2-54-204-96-190.compute-1.amazonaws.com:5432/da6eopva69emal
 
 # Password validation
