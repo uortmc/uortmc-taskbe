@@ -76,7 +76,10 @@ class ScanController:
             The tests list returns the list of the checks to be made for a specific file format. tests[1] checks if the
             underlying image is a png image.
         """
-        if(not imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'):
+        try:
+            if(not imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'):
+                raise ImageBase64DecodeException()
+        except:
             raise ImageBase64DecodeException()
         return base64Img
 
