@@ -18,7 +18,9 @@ from ..exceptions.scan import TokenValidationViolation, ScanNotFound, ImageBase6
 from ..logging.levels import LogLevel
 from ..logging.logging import LoggingLayer
 from ..models import Scan
-from ..service.InfoBeService import InfoBeService
+from ..service.coms.InfobackendService import InfobackendService
+from ..service.prediction.PredictionService import PredictionService
+
 
 
 class ScanController:
@@ -26,7 +28,9 @@ class ScanController:
     loggingLayer=LoggingLayer(logger).log
     dao:ScanDAO=ScanDAO()
     dto:ScanDTO=ScanDTO("ScanController")
-    infoBeService:InfoBeService=InfoBeService()
+    infoBackendService:InfobackendService=InfobackendService()
+    predictionService:PredictionService=PredictionService(dao,infoBackendService)
+
 
     @staticmethod
     def getScans(req:HttpRequest):
@@ -50,7 +54,7 @@ class ScanController:
             (token,image)=ScanController.__getFieldsFromAddRequest(req)
             image=ScanController.__validateBase64Image(image)
             scan:Scan=ScanController.dao.addScan(token,image)
-            mocked=ScanController.infoBeService.proccessScan(scan)
+            mocked=ScanController.predictionService.proccessScan(scan)
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.successAddScan(scan)

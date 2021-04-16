@@ -8,5 +8,6 @@ class ScanSerializer():
             "algorithm":scan.algorithm,
             "token":scan.token,
             "image":scan.image,
-            "results":scan.results
+            "results":scan.results,
+            "prediction":scan.prediction
         }
