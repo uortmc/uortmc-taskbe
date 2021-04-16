@@ -2,9 +2,12 @@ from matplotlib import image
 from matplotlib import pyplot
 import numpy as np
 
+
+from random import randint
+
 from filters.Chop import Chop
 from filters.Grayscale import Grayscale
-from random import randint
+
 """
 This is a interface to our infrastructure, of what a 'dataset' means.
 """
