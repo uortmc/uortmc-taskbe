@@ -8,5 +8,4 @@ class SCVPredictor(pykka.ThreadingActor):
         scan=message[0]
         callback=message[1]
         callback(scan,"Maligrant","Mocked")
-        logging.error("pykka responds")
 

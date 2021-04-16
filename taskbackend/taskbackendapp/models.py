@@ -9,6 +9,7 @@ class Scan(Model):
     token = UUIDField('Scan Token',unique=True, editable=False)
     image = TextField('Image Base64',editable=False,default="")
     algorithm=CharField('Algorithm Used',max_length=10,choices=ALGORITHMS,default=ALGORITHMS[0][0])
+    prediction=TextField('Prediction',max_length=10,default="Not Set")
     results=TextField('Algorithm Text Output',max_length=300,default="Not Set")
 
     def __str__(self):

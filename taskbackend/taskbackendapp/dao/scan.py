@@ -18,4 +18,10 @@ class ScanDAO:
             raise ScanNotFound
         return s[0]  # Token is unique, so this list will always have 1 or 0 elements
 
+    def scanCompleted(self,scan:Scan,prediction:str,results:str)->Scan:
+        scan.prediction = prediction
+        scan.results = results
+        scan.save()
+        return scan
+
 
