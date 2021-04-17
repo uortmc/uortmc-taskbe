@@ -5,8 +5,8 @@ import numpy as np
 
 from random import randint
 
-from filters.Chop import Chop
-from filters.Grayscale import Grayscale
+from ..filters.Chop import Chop
+from ..filters.Grayscale import Grayscale
 
 """
 This is a interface to our infrastructure, of what a 'dataset' means.

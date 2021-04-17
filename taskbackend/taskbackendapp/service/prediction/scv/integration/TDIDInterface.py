@@ -9,8 +9,8 @@ from .CompatibleDataset import CompatibleDataset
 This is a interface to our infrastructure, of what a 'dataset' means.
 """
 class TDIDInterface(CompatibleDataset):
-    xmlroot = "../../../../../data/tdid/xml/"
-    rawjpgroot = "../../../../../data/tdid/raw_jpg/"
+    xmlroot = "../data/tdid/xml/"
+    rawjpgroot = "../data/tdid/raw_jpg/"
 
     images=list()
     targets=list()

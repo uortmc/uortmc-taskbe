@@ -1,6 +1,6 @@
 import requests
 
-from .scv.SCVPredictor import SCVPredictor
+from .scv.SVCPykkaPredictor import SVCPykkaPredictor
 from ...dao.scan import ScanDAO
 from ...models import Scan
 from ..coms import InfobackendService
@@ -9,7 +9,7 @@ import logging
 
 class PredictionService:
     def __init__(self, scanDao: ScanDAO, infobackendService: InfobackendService):
-        self.scvPredictor = SCVPredictor.start()
+        self.scvPredictor = SVCPykkaPredictor.start()
         self.scanDAO = scanDao
         self.infobackendService = infobackendService
 
