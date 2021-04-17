@@ -4,5 +4,5 @@ services:
     container_name: taskbe
     image: taskbe:latest
     ports:
-      - "8005:8000"
+      - "3002:3002"
     hostname: taskbe
