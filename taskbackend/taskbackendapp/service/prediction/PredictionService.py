@@ -14,7 +14,10 @@ class PredictionService:
         self.infobackendService = infobackendService
 
     def proccessScan(self, scan: Scan):
-        self.scvPredictor.tell((scan, lambda scan, results, output: self.declareScanComplete(scan, results, output)))
+        self.scvPredictor.tell(
+            (scan,
+             lambda scan, results, output:
+                self.declareScanComplete(scan, results, output)))
 
     def declareScanComplete(self, scan: Scan, prediction: str, algorithmOutput: str):
         self.scanDAO.scanCompleted(scan, prediction, algorithmOutput)

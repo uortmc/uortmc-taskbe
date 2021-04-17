@@ -34,8 +34,6 @@ class TDIDInterface(CompatibleDataset):
             except FileNotFoundError:
                 self.notfound.append(i)
 
-        print("Image load complete, but images "+str(self.notfound)+" not found")
-
     def data(self):
         return np.array(self.images)
 
