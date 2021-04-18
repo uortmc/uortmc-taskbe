@@ -31,6 +31,7 @@ sklearn==0.0
 sqlparse==0.4.1
 threadpoolctl==2.1.0
 torch==1.8.1
+torchaudio==0.8.1
 torchvision==0.9.1
 typing-extensions==3.7.4.3
 ua-parser==0.10.0
