@@ -7,7 +7,7 @@ from random import randint
 
 from ..filters.Chop import Chop
 from ..filters.Grayscale import Grayscale
-
+import logging
 """
 This is a interface to our infrastructure, of what a 'dataset' means.
 """
@@ -30,6 +30,8 @@ class CompatibleDataset:
     """
     @staticmethod
     def tiradsToTarget(tirads):
+        if(tirads==""):
+            logging.error("ERR! NOT AVAILABLE TIRARDS, DEFAULTS TO 1")
         if (tirads == "2" or tirads == "3"):
             return 0
         else:

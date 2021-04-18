@@ -4,7 +4,10 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import pprint
-
+import base64
+from PIL import Image
+import io
+import numpy
 from ....models import Scan
 from .integration.TDIDInterface import TDIDInterface
 from sklearn import datasets
@@ -31,6 +34,12 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
         self.logger.error("Scan token " + str(scan.token) +"\t\t\t"+str(message))
     def base64Decode(self,image:str):
         pass
+
+    def decodeImage(self,base64Image: str) -> numpy.ndarray:
+        image = base64.b64decode(str(base64Image))
+        img = Image.open(io.BytesIO(image))
+        return numpy.array(img)
+
     def predict(self,scan:Scan):
         try:
             self.loggingWithScan(scan,"Proccess initialization start")
@@ -52,6 +61,7 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
                 targets[:-160]  # Maligrant or benign
             )
             self.loggingWithScan(scan, "Fitting completed")
+
             # print(clf.predict(images[-1].reshape(1, -1)))
             # print(clf.predict(images))
             # print(targets)
@@ -60,15 +70,23 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
                 targets[len(targets) - 160:],  # Pass the Targets
                 clf.predict(images[len(targets) - 160:])  # Pass what the model predicts
             )
-            #decodedImage=numpy.ndarray(base64.b64decode(scan.image)).reshape((360,560,3))
-            l = len(base64.b64decode(scan.image))
-            self.loggingWithScan(scan,l)
-            print(con)
-            print(con[0] / (con[0] + con[1]))
-        except BaseException as e:
+            self.loggingWithScan(scan, "confusionMatrix:" + str(con))
+            self.loggingWithScan(scan, "Model Success Rate : " + str(con[0] / (con[0] + con[1])))
 
+
+            decodedImage=self.decodeImage(scan.image)
+            self.loggingWithScan(scan, "Scan image loaded : "+str(decodedImage.shape))
+            decodedImage=self.a.grayScale(self.a.chop(decodedImage))
+            self.loggingWithScan(scan, "Filters Applied" + str(decodedImage.shape))
+            #Apply filter, ensure that this shit works
+            self.loggingWithScan(scan,clf.predict(decodedImage.reshape(1, -1)))
+            result=clf.predict(decodedImage.reshape(1, -1))[0]
+            if(result==1):result="Maligrant"
+            else:result="Benign"
+            return (result, "-")
+        except BaseException as e:
             self.logger.error(e.__str__())
-        return ("Maligrant","Mocked")
+            return ("Not Set","Operation failed due to "+str(e))
     def on_receive(self, message) :
         scan=message[0]
         callback=message[1]
