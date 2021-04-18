@@ -82,8 +82,7 @@ class ScanController:
         """
         try:
             isJpeg = imghdr.tests[0](base64.b64decode(base64Img), None) == 'jpeg'
-            isPng=imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'
-            if not isPng and not isJpeg:
+            if not isJpeg:
                 raise ImageBase64DecodeException()
         except:
             raise ImageBase64DecodeException()
