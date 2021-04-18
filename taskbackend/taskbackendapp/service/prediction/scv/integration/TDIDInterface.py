@@ -3,7 +3,7 @@ import xmltodict
 from matplotlib import image
 from matplotlib import pyplot
 import numpy as np
-from integration.CompatibleDataset import CompatibleDataset
+from .CompatibleDataset import CompatibleDataset
 
 """
 This is a interface to our infrastructure, of what a 'dataset' means.
@@ -33,8 +33,6 @@ class TDIDInterface(CompatibleDataset):
 
             except FileNotFoundError:
                 self.notfound.append(i)
-
-        print("Image load complete, but images "+str(self.notfound)+" not found")
 
     def data(self):
         return np.array(self.images)

@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  taskbe:
+    container_name: taskbe
+    image: taskbe:latest
+    ports:
+      - "3002:3002"
+    hostname: taskbe

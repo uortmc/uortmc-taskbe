@@ -77,11 +77,13 @@ class ScanController:
     @staticmethod
     def __validateBase64Image(base64Img:str)->str:
         """
-            The tests list returns the list of the checks to be made for a specific file format. tests[1] checks if the
-            underlying image is a png image.
+            The tests list returns the list of the checks to be made for a specific file format.
+            tests[1] checks if the underlying image is a png image. test[0] if jpeg
         """
         try:
-            if(not imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'):
+            isJpeg = imghdr.tests[0](base64.b64decode(base64Img), None) == 'jpeg'
+            isPng=imghdr.tests[1](base64.b64decode(base64Img),None) == 'png'
+            if not isPng and not isJpeg:
                 raise ImageBase64DecodeException()
         except:
             raise ImageBase64DecodeException()
