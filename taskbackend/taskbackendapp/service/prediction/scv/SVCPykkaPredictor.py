@@ -11,7 +11,7 @@ from sklearn import datasets
 from sklearn import svm
 import sys
 import numpy
-
+import base64
 
 
 
@@ -29,6 +29,8 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
         super().__init__()
     def loggingWithScan(self,scan:Scan,message:str):
         self.logger.error("Scan token " + str(scan.token) +"\t\t\t"+str(message))
+    def base64Decode(self,image:str):
+        pass
     def predict(self,scan:Scan):
         try:
             self.loggingWithScan(scan,"Proccess initialization start")
@@ -37,7 +39,7 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
             images = np.array([self.a.modelCompatible(self.a.grayScale(self.a.chop(x))) for x in image_data])
             self.loggingWithScan(scan, "Grayscale and chop filters applied successfuly")
             targets = self.a.target()
-            self.loggingWithScan(scan, targets.shape + " healty targets loaded into memory")
+            self.loggingWithScan(scan, str(targets.shape) + " healty targets loaded into memory")
             images, targets = TDIDInterface.shuffleDataset(600, images, targets)
             self.loggingWithScan(scan, "shuffling with 600 passes completed")
             # pyplot.imshow(a.grayScale(a.chop(image_data[1])))
@@ -58,6 +60,9 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
                 targets[len(targets) - 160:],  # Pass the Targets
                 clf.predict(images[len(targets) - 160:])  # Pass what the model predicts
             )
+            #decodedImage=numpy.ndarray(base64.b64decode(scan.image)).reshape((360,560,3))
+            l = len(base64.b64decode(scan.image))
+            self.loggingWithScan(scan,l)
             print(con)
             print(con[0] / (con[0] + con[1]))
         except BaseException as e:
