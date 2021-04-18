@@ -83,7 +83,7 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
             #Apply filter, ensure that this shit works
             self.loggingWithScan(scan,clf.predict(decodedImage.reshape(1, -1)))
             result=clf.predict(decodedImage.reshape(1, -1))[0]
-            if(result==1):result="Maligrant"
+            if(result==1):result="Malignant"
             else:result="Benign"
             algorithmResult=self.logbuffer
             self.logbuffer=""

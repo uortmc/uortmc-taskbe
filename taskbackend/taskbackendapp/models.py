@@ -4,7 +4,8 @@ import uuid
 
 class Scan(Model):
     ALGORITHMS = [
-        ('SVC', 'Simple C-Support Vector Machine')
+        ('SVC', 'Simple C-Support Vector Machine V1'),
+        ('RAS', 'Residual neural network V18')
     ]
     token = UUIDField('Scan Token',unique=True, editable=False)
     image = TextField('Image Base64',editable=False,default="")
