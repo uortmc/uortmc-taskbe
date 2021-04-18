@@ -29,16 +29,19 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
         self.a = TDIDInterface()
         self.logger = logging.getLogger("Predictor")
         self.logger.setLevel(logging.NOTSET)
+        self.logbuffer=""
         super().__init__()
     def loggingWithScan(self,scan:Scan,message:str):
-        self.logger.error("Scan token " + str(scan.token) +"\t\t\t"+str(message))
-    def base64Decode(self,image:str):
-        pass
+        msg="Scan token " + str(scan.token) +"\t\t\t"+str(message)
+        self.logger.error(msg)
+        self.logbuffer+=msg+"\n"
+
 
     def decodeImage(self,base64Image: str) -> numpy.ndarray:
         image = base64.b64decode(str(base64Image))
         img = Image.open(io.BytesIO(image))
         return numpy.array(img)
+
 
     def predict(self,scan:Scan):
         try:
@@ -73,7 +76,6 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
             self.loggingWithScan(scan, "confusionMatrix:" + str(con))
             self.loggingWithScan(scan, "Model Success Rate : " + str(con[0] / (con[0] + con[1])))
 
-
             decodedImage=self.decodeImage(scan.image)
             self.loggingWithScan(scan, "Scan image loaded : "+str(decodedImage.shape))
             decodedImage=self.a.grayScale(self.a.chop(decodedImage))
@@ -83,10 +85,13 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
             result=clf.predict(decodedImage.reshape(1, -1))[0]
             if(result==1):result="Maligrant"
             else:result="Benign"
-            return (result, "-")
+            algorithmResult=self.logbuffer
+            self.logbuffer=""
+            return (result, algorithmResult)
         except BaseException as e:
             self.logger.error(e.__str__())
             return ("Not Set","Operation failed due to "+str(e))
+
     def on_receive(self, message) :
         scan=message[0]
         callback=message[1]
