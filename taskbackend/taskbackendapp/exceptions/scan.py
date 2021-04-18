@@ -8,7 +8,8 @@ class TokenValidationViolation(TaskbeException):
 class ImageBase64DecodeException(TaskbeException):
     def __init__(self):
         super(ImageBase64DecodeException,self).__init__("Given image base64 string wasn't decoded successfully, "
-                                                        "possibly corrupt data?")
+                                                        "possibly corrupt data or invalid data format? (Note that "
+                                                        "jpeg files are supported only in this version )")
 
 class ScanNotFound(TaskbeException):
     def __init__(self):
