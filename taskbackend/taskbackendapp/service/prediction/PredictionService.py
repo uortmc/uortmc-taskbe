@@ -1,6 +1,6 @@
 import requests
 
-from .rasNet.RasNetPykkaPredictor import RasNetPykkaPredictor
+from .rasNet.ResNetPykkaPredictor import ResNetPykkaPredictor
 from .svc.SVCPykkaPredictor import SVCPykkaPredictor
 from ...dao.scan import ScanDAO
 from ...models import Scan
@@ -11,7 +11,7 @@ import logging
 class PredictionService:
     def __init__(self, scanDao: ScanDAO, infobackendService: InfobackendService):
         self.scvPredictor = SVCPykkaPredictor.start()
-        self.rasNetPredictor = RasNetPykkaPredictor.start()
+        self.resNetPredictor = ResNetPykkaPredictor.start()
         self.scanDAO = scanDao
         self.infobackendService = infobackendService
 
@@ -21,8 +21,8 @@ class PredictionService:
             self.scvPredictor.tell(
                 (scan,lambda scan, results, output:
                     self.declareScanComplete(scan, results, output)))
-        elif(scan.algorithm=='RAS'):
-            self.rasNetPredictor.tell(
+        elif(scan.algorithm=='RES'):
+            self.resNetPredictor.tell(
                 (scan,lambda scan, results, output:
                     self.declareScanComplete(scan, results, output))
             )

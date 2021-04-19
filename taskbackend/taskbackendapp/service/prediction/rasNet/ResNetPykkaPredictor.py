@@ -18,7 +18,7 @@ from matplotlib import image
 from matplotlib import pyplot
 
 
-class RasNetPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
+class ResNetPykkaPredictor(pykka.ThreadingActor, AbstractPredictor):
     def __init__(self):
         # if GPU is available, use GPU; otherwise use CPU
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -33,7 +33,7 @@ class RasNetPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
         self.model.load_state_dict(torch.load(f'resnet18.tch', map_location=torch.device('cpu')))
         self.model.eval()
         self.model = self.model.to(self.device)
-        self.logger = logging.getLogger("RasNetPykkaPredictor")
+        self.logger = logging.getLogger("ResNetPykkaPredictor")
         self.logger.setLevel(logging.NOTSET)
         self.logbuffer = ""
         super().__init__()
@@ -48,14 +48,14 @@ class RasNetPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
         img = Image.open(io.BytesIO(image))
         return img
 
-    def algorithmCode(self):return "RAS"
+    def algorithmCode(self):return "RES"
 
 
     def predict(self,scan:Scan):
         try:
             img=self.image_transformer(self.decodeImage(scan.image))
             img = transforms.functional.crop(img, 8, 87, 301, 385)
-            self.loggingWithScan(scan,"RASNET Algorithm initialized")
+            self.loggingWithScan(scan,"RESNET Algorithm initialized")
             prediction = self.model(img).argmax().item()
             self.loggingWithScan(scan, "Model predicted: "+str(prediction))
             if prediction == 0:
