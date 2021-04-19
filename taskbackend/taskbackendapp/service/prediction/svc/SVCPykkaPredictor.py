@@ -29,7 +29,7 @@ class SVCPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
     def __init__(self):
         numpy.set_printoptions(threshold=sys.maxsize)
         self.a = TDIDInterface()
-        self.logger = logging.getLogger("Predictor")
+        self.logger = logging.getLogger("SVCPykkaPredictor")
         self.logger.setLevel(logging.NOTSET)
         self.logbuffer=""
         super().__init__()
