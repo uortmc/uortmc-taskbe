@@ -5,13 +5,15 @@ from ..models import Scan
 
 
 class ScanDAO:
-    def addScan(self,token,image):
+    def addScan(self,token,image,algorithm:str):
         try:
-            s=Scan(token=token,image=image)
+            s=Scan(token=token,image=image,algorithm=algorithm)
             s.save()
             return s
         except IntegrityError as e:
             raise TokenValidationViolation
+
+
     def getScan(self,token):
         s = Scan.objects.filter(token=token)
         if (len(s)==0):

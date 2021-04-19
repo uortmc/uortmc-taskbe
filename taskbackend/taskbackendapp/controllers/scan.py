@@ -14,7 +14,8 @@ import imghdr
 from ..dao.scan import ScanDAO
 from ..dto.scan import ScanDTO
 from ..exceptions.base import FieldsMissingException
-from ..exceptions.scan import TokenValidationViolation, ScanNotFound, ImageBase64DecodeException
+from ..exceptions.scan import TokenValidationViolation, ScanNotFound, ImageBase64DecodeException, \
+    AlgorithmRequestedNotSupported
 from ..logging.levels import LogLevel
 from ..logging.logging import LoggingLayer
 from ..models import Scan
@@ -51,16 +52,16 @@ class ScanController:
     @staticmethod
     def addScan(req: HttpRequest):
         try:
-            (token,image)=ScanController.__getFieldsFromAddRequest(req)
+            (token,image,algorithm)=ScanController.__getFieldsFromAddRequest(req)
             image=ScanController.__validateBase64Image(image)
-            scan:Scan=ScanController.dao.addScan(token,image)
+            scan:Scan=ScanController.dao.addScan(token,image,algorithm)
             mocked=ScanController.predictionService.proccessScan(scan)
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.successAddScan(scan)
                 )
             )
-        except (TokenValidationViolation,FieldsMissingException,ImageBase64DecodeException) as e:
+        except (TokenValidationViolation,FieldsMissingException,ImageBase64DecodeException,AlgorithmRequestedNotSupported) as e:
             return JsonResponse(
                 ScanController.loggingLayer(
                     ScanController.dto.fail(e.reason),LogLevel.ERROR
@@ -70,10 +71,18 @@ class ScanController:
     @staticmethod
     def __getFieldsFromAddRequest(req:HttpRequest)->():
         try:
-            return (req.POST['token'],req.POST['image'])
+            return (req.POST['token'],req.POST['image'],ScanController.__validateAlgorithmRequested(req.POST['algorithm']))
         except MultiValueDictKeyError:
             raise FieldsMissingException
+        except AlgorithmRequestedNotSupported as e:
+            raise e #Catch and throw
 
+
+    @staticmethod
+    def __validateAlgorithmRequested(algorithm:str)->str:
+        if(algorithm in [i[0] for i in Scan.ALGORITHMS]):
+            return algorithm
+        raise AlgorithmRequestedNotSupported
     @staticmethod
     def __validateBase64Image(base64Img:str)->str:
         """

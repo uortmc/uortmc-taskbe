@@ -8,6 +8,8 @@ import base64
 from PIL import Image
 import io
 import numpy
+
+from ..AbstractPredictor import AbstractPredictor
 from ....models import Scan
 from .integration.TDIDInterface import TDIDInterface
 from sklearn import datasets
@@ -23,7 +25,7 @@ from matplotlib import image
 from matplotlib import pyplot
 
 
-class SVCPykkaPredictor(pykka.ThreadingActor):
+class SVCPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
     def __init__(self):
         numpy.set_printoptions(threshold=sys.maxsize)
         self.a = TDIDInterface()
@@ -36,6 +38,8 @@ class SVCPykkaPredictor(pykka.ThreadingActor):
         self.logger.error(msg)
         self.logbuffer+=msg+"\n"
 
+
+    def algorithmCode(self):return "SVC"
 
     def decodeImage(self,base64Image: str) -> numpy.ndarray:
         image = base64.b64decode(str(base64Image))
