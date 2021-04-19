@@ -18,7 +18,7 @@ from matplotlib import image
 from matplotlib import pyplot
 
 
-class RasNetPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
+class ResNetPykkaPredictor(pykka.ThreadingActor, AbstractPredictor):
     def __init__(self):
         # if GPU is available, use GPU; otherwise use CPU
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -48,7 +48,7 @@ class RasNetPykkaPredictor(pykka.ThreadingActor,AbstractPredictor):
         img = Image.open(io.BytesIO(image))
         return img
 
-    def algorithmCode(self):return "RAS"
+    def algorithmCode(self):return "RES"
 
 
     def predict(self,scan:Scan):
